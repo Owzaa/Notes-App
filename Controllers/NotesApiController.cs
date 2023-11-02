@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
+using Notes.Models;
+using static Notes.Models.NotesModel;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Notes.Controllers
@@ -8,18 +10,35 @@ namespace Notes.Controllers
     [ApiController]
     public class NotesApiController : ControllerBase
     {
-        // GET: api/<NotesApiController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+
+        private readonly NotesContext _context;
+
+        public NotesApiController(NotesContext context)
         {
-            return new string[] { "value1", "value2" };
+            _context = context;
         }
 
-        // GET api/<NotesApiController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+
+
+        // GET: api/Notes
+        [HttpGet]
+        public Task<ActionResult<IEnumerable<NotesModel>>> GetAsync()
         {
-            return "value";
+            return Task.FromResult((ActionResult<IEnumerable<NotesModel>>)_context.NotesModel);
+        }
+        // GET: api/Notes/5
+        [HttpGet("{id}")]
+        public Task<ActionResult<NotesModel>> GetNote(int id)
+        {
+            var note = _context.Notes;
+
+            if (note == null)
+            {
+                return Task.FromResult<ActionResult<NotesModel>>(NotFound());
+            }
+
+            return Task.FromResult<ActionResult<NotesModel>> ((ActionResult<NotesModel>)note);
         }
 
         // POST api/<NotesApiController>
