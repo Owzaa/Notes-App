@@ -19,6 +19,26 @@ namespace Notes.Controllers
             return View();
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+        public IActionResult Read()
+        {
+            return View();
+        }
+        public IActionResult Update()
+        {
+            return View();
+        }
+        public IActionResult Delete()
+        {
+
+            return View();
+        }
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

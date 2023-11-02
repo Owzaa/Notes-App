@@ -10,6 +10,6 @@ namespace Notes.Data
             : base(options)
         {
         }
-        public DbSet<Notes.Models.NotesModel>? NotesModel { get; set; }
+        public DbSet<NotesModel>? NotesModel { get; set; }
     }
 }
