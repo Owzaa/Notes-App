@@ -18,15 +18,13 @@ namespace Notes.Controllers
             _context = context;
         }
 
-
-
-
         // GET: api/Notes
         [HttpGet]
         public Task<ActionResult<IEnumerable<NotesModel>>> GetAsync()
         {
             return Task.FromResult((ActionResult<IEnumerable<NotesModel>>)_context.NotesModel);
         }
+
         // GET: api/Notes/5
         [HttpGet("{id}")]
         public Task<ActionResult<NotesModel>> GetNote(int id)
@@ -50,16 +48,55 @@ namespace Notes.Controllers
             return CreatedAtAction("GetNote", new { id = note.Id }, note);
         }
 
-        // PUT api/<NotesApiController>/5
+        // PUT: api/Notes/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutNote(int id, NotesModel note)
         {
+            if (id != note.Id)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!NoteExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // DELETE api/<NotesApiController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        private bool NoteExists(int id)
         {
+            throw new NotImplementedException();
         }
+
+
+        // DELETE: api/Notes/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNote(int id)
+        {
+            var note =  _context.Notes;
+            if (note == null)
+            {
+                return NotFound();
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+      
     }
 }
+
