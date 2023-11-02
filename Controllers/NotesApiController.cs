@@ -41,10 +41,13 @@ namespace Notes.Controllers
             return Task.FromResult<ActionResult<NotesModel>> ((ActionResult<NotesModel>)note);
         }
 
-        // POST api/<NotesApiController>
+        // POST: api/Notes
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<NotesModel>> PostNote(NotesModel note)
         {
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetNote", new { id = note.Id }, note);
         }
 
         // PUT api/<NotesApiController>/5
